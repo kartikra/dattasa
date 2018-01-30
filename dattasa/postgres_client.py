@@ -10,7 +10,7 @@ import shutil
 
 class PostgresClient():
     '''
-    Connects to gp3 database and executes sql queries against db
+    Connects to greenplum database and executes sql queries against db
     '''
 
     def __init__(self, config_file, db_credentials, db_host):
@@ -622,7 +622,7 @@ class GreenplumClient(PostgresClient):
 
             gpload_bash_file_name = gpload_script_location + "/gpload_" + gp_target_table + ".sh"
             gpload_bash_file = open(gpload_bash_file_name, 'w')
-            gpload_bash_file.write("source " + os.environ['STRATA_GPLOAD'] + "/" + "greenplum_loaders_path.sh" + "\n")
+            gpload_bash_file.write("source " + os.environ['GPLOAD_HOME'] + "/" + "greenplum_loaders_path.sh" + "\n")
             gpload_bash_file.write("gpload -f " + gpload_srcipt_file_name + "\n")
             gpload_bash_file.close()
             gpload_command = "chmod 755 " + gpload_bash_file_name + " && bash " + gpload_bash_file_name

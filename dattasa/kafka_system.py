@@ -60,10 +60,10 @@ After=network.target remote-fs.target zookeeper.service kafka.service
 
 [Service]
 Type=simple
-User=airflow_sa
-Group=analytics
+User=my_user
+Group=my_group
 Environment=JAVA_HOME=/opt/jdk1.8.0_121/
-ExecStart=/usr/bin/env "${JAVA_HOME}/bin/java" -jar /opt/Kafdrop/target/kafdrop-2.0.0.jar --zookeeper.connect=den-sa-smash01:2181 --server.port=9090
+ExecStart=/usr/bin/env "${JAVA_HOME}/bin/java" -jar /opt/Kafdrop/target/kafdrop-2.0.0.jar --zookeeper.connect=kakfa-server:2181 --server.port=9090
 
 [Install]
 WantedBy=multi-user.target

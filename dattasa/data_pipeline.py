@@ -131,13 +131,20 @@ class DataProcessor():
     
     '''
     def __init__(self, source_conn, target_conn='', config_file='',
-                 source_file='', target_file='', load_parameters={}):
+                 source_file='', target_file='', temp_dir='',
+                 load_parameters={}):
 
         self.source_conn = source_conn
         self.target_conn = target_conn
         self.source_file = source_file
         self.target_file = target_file
         self.load_parameters = load_parameters
+
+        if temp_dir == '':
+            self.temp_dir = os.environ['TEMP_DIR']
+        else:
+            self.temp_dir = temp_dir
+
         if config_file == '':
             self.config_file = os.environ['HOME'] + '/database.yaml'
         else:
@@ -183,7 +190,7 @@ class DataProcessor():
             sql_file_name = os.path.basename(sql_file)
             file_name = sql_file_name.lower().replace('.sql', '')
 
-            temp_dir = os.environ['STRATA_EXTRACTS'] + '/temp/'
+            temp_dir = self.temp_dir
             log_out = open(log_file, 'a')
 
             f = open(sql_file, 'r')
@@ -263,13 +270,13 @@ class DataProcessor():
                 sql_file = source_extract_sql
                 file_name = os.path.basename(source_extract_sql)
                 file_name.replace('.sql', '')
-                extract_file = os.environ['STRATA_EXTRACTS'] + "/temp/" + file_name + ".csv"
+                extract_file = self.temp_dir + file_name + ".csv"
             else:
-                sql_file = os.environ['STRATA_EXTRACTS'] + "/temp/" + source_table + ".sql"
+                sql_file = self.temp_dir + source_table + ".sql"
                 sql_out = open(sql_file, 'w')
                 sql_out.write("SELECT * FROM " + source_table)
                 sql_out.close()
-                extract_file = os.environ['STRATA_EXTRACTS'] + "/temp/" + source_table + ".csv"
+                extract_file = self.temp_dir + source_table + ".csv"
 
             if source_adapter == 'mysql':
                 data_mysql = DataComponent().set_credentials(self.source_conn, self.config_file)
@@ -290,7 +297,7 @@ class DataProcessor():
         if target_adapter == 'greenplum':
             if target_err_table == "":
                 target_err_table = target_table + "_err"
-            gpload_script_location = os.environ['STRATA_EXTRACTS'] + '/temp'
+            gpload_script_location = self.temp_dir
             gpload_file_name = "load_" + self.target_conn + "_" + target_table
             column_list = []
 

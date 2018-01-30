@@ -6,22 +6,20 @@ import json
 import os
 from random import randint
 import pandas as pd
-from dattasa import parallelize_sql_execution as pse
 from dattasa import data_pipeline as dp
 
 
 def run_script(**kwargs):
     '''
     The function takes in
-        file name, db_host, db_config_file,
+        file name, db_host, db_config_file, audit_table_name
         sql path, output path, log path
         delimited out indicator and db host as input
-    Default db_host='gp3' and default file format is fixed width (delimited_file='F')
     Default db_config_file = $HOME/database.yaml
-    Default folders if not specified are $STRATA_SQL, $STRATA_EXTRACTS/temp, $STRATA_LOG
-    The function then searches for the db_host name in $STRATA_LOG/database.yaml file
+    Default folders if not specified are $SQL_DIR, $TEMP_DIR, $LOG_DIR
+    The function then searches for the db_host name in database.yaml file
     and gets the login credentials. The sql is run and the output and log files are redirected to the
-    path specified. In case of any sql failures, the sa-utlity package will throw and exception and
+    path specified. In case of any sql failures, the dattasa package will throw and exception and
     this function will not complete successfully
 
     Naming convention for the files
@@ -44,18 +42,18 @@ def run_script(**kwargs):
 
     # Passing arguments to a function
     file_name = kwargs['file_name']
-    db_host = kwargs.get('db_host', 'gp3')
+    audit_table = kwargs['audit_table']
+    db_host = kwargs['db_host']
+
     db_config_file = kwargs.get('db_config_file', os.environ['HOME'] + '/database.yaml')
-    sql_path = kwargs.get('sql_path', os.environ['STRATA_SQL'])
-    out_path = kwargs.get('out_path', os.environ['STRATA_EXTRACTS'] + '/temp')
-    log_path = kwargs.get('log_path', os.environ['STRATA_LOG'])
-    audit_table = kwargs.get('audit_table', 'birst_dev.strata_load_audit')
+    sql_path = kwargs.get('sql_path', os.environ['SQL_DIR'])
+    out_path = kwargs.get('out_path', os.environ['TEMP_DIR'])
+    log_path = kwargs.get('log_path', os.environ['LOG_DIR'])
 
     pre_check_tables = kwargs.get('pre_check_tables', [])
     pre_check_scripts = kwargs.get('pre_check_scripts', [])
     load_tables = kwargs.get('load_tables', [])
     run_sql_file = kwargs.get('run_sql_file', True)
-    parallelize_by_emp_id = kwargs.get('parallelize_by_emp_id', False)
 
     delimited_file = kwargs.get('delimited_file', 'F')
 
@@ -67,8 +65,7 @@ def run_script(**kwargs):
 
     '''
     Set all the files needed before calling run_psql_file function from greenplum_client
-    You can either use os environment variables eg:- os.environ['HOME']
-    or airflow variables eg:- path_strata_projects
+    You can either use os environment variables eg:- os.environ['HOME'] or airflow variables 
     '''
     sql_file = sql_path + '/' + file_name + '.sql'
     out_file = out_path + '/' + file_name + ".out"
@@ -95,11 +92,6 @@ def run_script(**kwargs):
     Note the sql will run only after all pre-checks succeed and entry in audit table is made succesfully
     '''
     if run_sql_file:
-        if parallelize_by_emp_id:
-            process = pse.ParallelSqlExecutor(sql_file, log_file, out_file)
-            process.generate_employer_sets()
-            process.run_parallel_queries()
-        else:
             db = dp.DataComponent().set_credentials(db_host, db_config_file)
             db.run_psql_file(sql_file, log_file, out_file, delimited)
 
@@ -203,13 +195,14 @@ def load_audit_table(**kwargs):
     '''
 
     audit_id = kwargs['audit_id']     # Required Parameter
-    load_type = kwargs['load_type']     # Required Parameter
+    load_type = kwargs['load_type']   # Required Parameter
+    audit_table = kwargs['audit_table'] # Required Parameter
+    queue_name = kwargs['queue_name'] # Required Parameter
+    rabbitmq_host = kwargs['rabbitmq_host']  # Required Parameter
+
     load_tables = kwargs.get('load_tables', [])
     load_description = kwargs.get('load_description', '')
-    audit_table = kwargs['audit_table']
-
-    rabbitmq_config_yaml = os.environ['HOME'] + '/database.yaml'
-    rabbitmq_host = 'rabbitmq-smash01'
+    rabbitmq_config_yaml = kwargs.get('config_yaml', os.environ['HOME'] + '/database.yaml')
 
     producer = dp.DataComponent().set_credentials(rabbitmq_host, rabbitmq_config_yaml)
 
@@ -224,7 +217,7 @@ def load_audit_table(**kwargs):
             "load_time": dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
         }
         message = json.dumps(data)
-        status = producer.send('airflow_audit', message, auto_delete=False)
+        status = producer.send(queue_name, message, auto_delete=False)
         print("published message for creating " + load_type + "-load audit record for " + table_name)
 
     producer.stop()
@@ -232,33 +225,33 @@ def load_audit_table(**kwargs):
     return
 
 
-def get_copy_mysql_table_to_gp_command(source_table, target_table, source_conn='whreport01',
-                                       target_conn='gp3', error_limit='2', null_string='',
+def get_copy_mysql_table_to_gp_command(source_table, target_table, source_conn='',
+                                       target_conn='', error_limit='2', null_string='',
                                        description=''):
     if null_string != '':
-        load_command = 'python2.7 ' + os.environ['STRATA_PROJECTS'] + '/python_bash_scripts copy_mysql_table_to_gp.py ' + \
+        load_command = 'python ' + os.environ['PROJECT_HOME'] + '/python_bash_scripts copy_mysql_table_to_gp.py ' + \
                        ' -s ' + source_conn + ' -t ' + target_conn + ' -x ' + source_table + \
                        ' -y ' + target_table + ' -d ' + description + ' -e ' + error_limit + \
                        ' -n ' + null_string
     else:
-        load_command = 'python2.7 ' + os.environ['STRATA_PROJECTS'] + '/python_bash_scripts copy_mysql_table_to_gp.py ' + \
+        load_command = 'python ' + os.environ['PROJECT_HOME'] + '/python_bash_scripts copy_mysql_table_to_gp.py ' + \
                        ' -s ' + source_conn + ' -t ' + target_conn + ' -x ' + source_table + \
                        ' -y ' + target_table + ' -d ' + description + ' -e ' + error_limit
 
     return load_command
 
 
-def get_copy_postgres_table_to_gp_command(source_table, target_table, source_conn='airflow-smash01',
-                                          target_conn='gp3', error_limit='2', null_string='',
+def get_copy_postgres_table_to_gp_command(source_table, target_table, source_conn='',
+                                          target_conn='', error_limit='2', null_string='',
                                           description=''):
 
     if null_string != '':
-        load_command = 'python2.7 ' + os.environ['STRATA_PROJECTS'] + '/python_bash_scripts copy_postgres_table_to_gp.py ' + \
+        load_command = 'python ' + os.environ['PROJECT_HOME'] + '/python_bash_scripts copy_postgres_table_to_gp.py ' + \
                        ' -s ' + source_conn + ' -t ' + target_conn + ' -x ' + source_table + \
                        ' -y ' + target_table + ' -d ' + description + ' -e ' + error_limit + \
                        ' -n ' + null_string
     else:
-        load_command = 'python2.7 ' + os.environ['STRATA_PROJECTS'] + '/python_bash_scripts copy_postgres_table_to_gp.py ' + \
+        load_command = 'python ' + os.environ['PROJECT_HOME'] + '/python_bash_scripts copy_postgres_table_to_gp.py ' + \
                        ' -s ' + source_conn + ' -t ' + target_conn + ' -x ' + source_table + \
                        ' -y ' + target_table + ' -d ' + description + ' -e ' + error_limit
 

@@ -55,8 +55,6 @@ v1.0 of this package contains wrapper scripts for doing the following -
 
 15. dag_controller      : Functions needed to used sa_utility packages within airflow dag
 
-16. parallelize_sql_executor : Run a sql file in parallel for sets of employer_ids
-
 See packaging, installation and examples below.
 
 
@@ -68,9 +66,7 @@ pip install -e .
 
 1) Download from github and build from scratch
 
-
 git clone git@github.com:kartikra/dattasa.git
-
 
 Check if the folder structure is as follows 
 
@@ -92,7 +88,6 @@ dattasa
         kafka_system.py
         rabbitmq_system.py
         dag_controller.py
-        parallelize_sql_executor.py
     README.md
     setup.py
     setup.cfg
@@ -100,7 +95,6 @@ dattasa
 Check the version number specified in setup.py and change it if needed
 Version should be >=  whatever is the current version installed for changes to take effect
 
-2)
 cd dattasa
 python setup.py build
 python setup.py clean
@@ -108,9 +102,16 @@ python setup.py install
 
 OR
 #------------------ Creating this python package using pip --------------------
+git clone git@github.com:kartikra/dattasa.git
 cd dattasa
 pip install -e .
 pip install -U -e . (if upgrading)
 
 
-
+#-- Environment Variables
+- GPLOAD_HOME: Path to gpload package
+- PROJECT_HOME: Path to python project directory 
+- PROJECT_HOME/python_bash_scripts: python scripts to invoke gpload
+- SQL_DIR: Place to keep all sql scripts
+- TEMP_DIR: All temp files created in this folder
+- LOG_DIR: All log files are created in this folder
