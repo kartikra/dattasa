@@ -1,0 +1,16 @@
+*.pyc
+*.xml
+*.csv
+*.txt
+.*idea/
+build/
+*.build/
+.build/
+*.dist/
+dist/
+*.egg-info/
+egg-info/
+.DS_Store/
+.*DS_Store/
+.*DS_Store
+.DS_Store
