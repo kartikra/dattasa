@@ -1,0 +1,27 @@
+greenplum_source: &greenplum_source
+    adapter: greenplum
+    host: gp_host_name
+    database: gp_database_name
+    port: 5432
+    user: gp_user
+    password: gp_user_password
+
+
+postgres_source: &postgres_source
+    adapter: postgres
+    host: postgres_host_name
+    database: postgres_database_name
+    port: 5432
+    user: postgres_db_user
+    password: postgres_db_user_password
+
+
+mysql_source: &mysql_source
+    adapter: mysql
+    host: mysql_host_name
+    database: database_name
+    port: 3306
+    user: mysql_db_user
+    password: mysql_db_user_password
+
+

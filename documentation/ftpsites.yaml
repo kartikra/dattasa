@@ -1,0 +1,9 @@
+my_site: &my_site
+    host: sftphost.somecomany.com
+    port: some_port
+    user: some_user
+    password: some_password
+    folder: some_folder
+
+
+
