@@ -1,5 +1,5 @@
 # Project Background
-###python package that helps data engineers and data scientists accelerate data-pipeline development 
+### python package that helps data engineers and data scientists accelerate data-pipeline development 
 The goal of this python project is to build a bunch of wrappers that
 can be reused for building data pipelines from -
 - Relational databases: postgres, mysql, greenplum, redshift, etc.
@@ -28,7 +28,7 @@ delighted_client|Get nps scores and survey responses from delighted.[api documen
 wootric_client|Gets nps scores and survey responses from wootric.[api documentation](http://docs.wootric.com/api)|
 dag_controller|Functions needed to integrate this package within an airflow dag. [airflow documentation](https://airflow.apache.org/) and [github project](https://github.com/apache/incubator-airflow)|
 
-#data_pipeline class
+## data_pipeline class
 This is the main class that's accessible to other projects. 
 The data pipeline consists of data from components and API.
 Each object of data-processor can use individual data streams and process them data_pipeline decides which
@@ -39,7 +39,7 @@ data_pipeline comprises of 3 classes
 - DataProcessor : transfers and loads data between data components
 
 
-# Installation Steps. There are 3 options
+## Installation Steps. There are 3 options
 
 1) Easiest way is to install from pypi using pip
 ```
@@ -63,7 +63,7 @@ pip install -e .
 pip install -U -e . (if upgrading)
 ```
 
-# Environment Variables
+## Environment Variables
 dattasa package relies on the following environment variables. Make sure to set these in your bash profile
 - GPLOAD_HOME: Path to gpload package
 - PROJECT_HOME: Path to python project directory 
