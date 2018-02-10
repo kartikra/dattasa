@@ -4,6 +4,3 @@ my_site: &my_site
     user: some_user
     password: some_password
     folder: some_folder
-
-
-

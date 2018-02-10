@@ -46,7 +46,7 @@ dattasa package relies on the following environment variables. Make sure to set 
 - LOG_DIR: All log files are created in this folder
 
 
-## Description of classes and methods
+## Description of classes
 v1.0 of the package comprises of the following classes. Please see link to sample code for details on how to use each of them.
 
 |class|  Description  | Sample Code |

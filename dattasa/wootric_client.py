@@ -64,21 +64,35 @@ class WootricClient():
 
         my_session = requests.session()
         headers = {"Authorization": "Bearer " + self.access_token}
+        response_list = []
 
         if method_name not in ("nps_summary", "responses", "end_users", "declines", "segments", "email_survey"):
             print ("Invalid method_name = " + method_name)
             print ("Check http://docs.wootric.com/api/ for list of avialble methods")
             raise Exception("Invalid method_name = " + method_name)
 
-        if params == {}:
-            r = my_session.get(url_endpoint + method_name, verify=verify, headers=headers)
-        else:
-            r = my_session.get(url_endpoint + method_name + "?" + self.unicode_urlencode(params),
-                               verify=verify, headers=headers)
+        i = 0
+        more_pages = True
+        while more_pages:
+            i += 1
+            params["page"] = i
+            params["per_page"] = 50
 
-        response_list = []
-        if len(r.json()) > 0:
-            for response in r.json():
-                response_list.append(response)
+            api_response = my_session.get(url_endpoint + method_name + "?" + self.unicode_urlencode(params),
+                                          verify=verify, headers=headers)
+            try:
+                if api_response.json()['message'] == 'Not Found':
+                    print("curl request - " + url_endpoint + method_name + "?" + self.unicode_urlencode(params))
+                    print("no results returned. check curl request")
+                    break
+            except:
+                if len(api_response.json()) > 0:
+                    for response in api_response.json():
+                        response_list.append(response)
+                else:
+                    more_pages = False
+
+                if len(api_response.json()) < 50:
+                    more_pages = False
 
         return response_list
