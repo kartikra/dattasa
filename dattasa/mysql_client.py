@@ -145,6 +145,13 @@ class MySQLClient():
         except Exception as e:
             print("error message: {0}".format(e))
 
+    def rollback(self):
+        try:
+            self.conn.rollback()
+            print("successful rollback")
+        except Exception as e:
+            print("error message: {0}".format(e))
+
     def get_results(self):
         return self.cur.fetchall()
 
