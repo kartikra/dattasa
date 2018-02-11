@@ -87,3 +87,8 @@ Use git lfs
 - track ipynb files in your project. go to the project folder and do ```git lfs track "*.psd"```
 - add ```.*ipynb_checkpoints/``` to .gitignore file
 - Finally add .gitattributes file ```git add .gitatttributes```
+
+### Deploying code in pypi
+- build the code: ```python setup.py build && python setup.py clean && python setup.py install```
+- push to pypitest : ```python setup.py sdist upload -r pypitest```
+- push to pypi prod : ```python setup.py sdist upload -r pypi```

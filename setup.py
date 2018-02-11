@@ -68,8 +68,6 @@ if maj_ver == 3:
             'Development Status :: 4 - Beta',
 
             # Indicate who your project is intended for
-            'Intended Audience :: Data Engineering, Analytics and Data Science',
-            'Topic :: Data Engineering and Analytics :: Tools for building data pipeline',
 
             # Pick your license as you wish (should match "license" above)
             'License :: OSI Approved :: MIT License',
