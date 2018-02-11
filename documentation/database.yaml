@@ -64,7 +64,7 @@ wootric-project: &wootric-project
 kafka-smash01: &kafka-smash01
     adapter: kafka-batch
     bootstrap_servers:
-        - "vensav-smash01:9092"
+        - "kafka-server-name:9092"
 
 mongo-db01: &mongo-db01
     adapter: mongodb
@@ -74,3 +74,9 @@ mongo-db01: &mongo-db01
     database: mongo_db_name
     user: mongo_user
     password: mongo_user_password
+
+redis-01: &redis-01
+    adapter: redis
+    host: redis_host
+    database: 1
+    port: 6379
