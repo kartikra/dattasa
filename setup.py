@@ -18,11 +18,16 @@ if maj_ver == 3:
 else:
     from distutils.core import setup
 
+try:
+    from pypandoc import convert
+    read_md = lambda f: convert(f, 'rst')
+except ImportError:
+    print("warning: pypandoc module not found, could not convert Markdown to RST")
+    read_md = lambda f: open(f, 'r').read()
+
 here = path.abspath(path.dirname(__file__))
 # Get the long description from the README file
-with open(path.join(here, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
-
+long_description=read_md('README.md')
 
 try:
     require('ConflictingDistribution')
@@ -114,7 +119,7 @@ else:
         version='1.0',
         packages=['dattasa'],
         url='https://github.com/kartikra/dattasa',
-        license='GNU',
+        license='MIT',
         author='Kartik Ramasubramanian',
         author_email='r.kartik@berkeley.edu',
         description='Python wrapper for connecting to postgres/greenplum, mysql, mongodb, kafka, redis, mixpanel  salesforce \
