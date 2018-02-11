@@ -51,14 +51,14 @@ v1.0 of the package comprises of the following classes. Please see link to sampl
 
 |class|  Description  | Sample Code |
 |:--------|:-----------------|:---------|
-environment| Lets you source all the os environment variables|
+environment| Lets you source all the os environment variables|[see first row in mongo example](documentation/mongo_example.ipynb)
 postgres_client| Lets you use psql and gpload utilities provided by [pivotal greenplum](https://gpdb.docs.pivotal.io/4350/common/client-docs-unix.html). Make connections to postgres / greenplum database using pyscopg2 or sqlalchemy.Use the connections to interact with database in interactive program or run queries from a sql file using the connection|[sample postgres code](documentation/postgres_client.ipynb)
 greenplum_client (inherits postgres_client)| Lets you use psql and gpload utilities provided by [pivotal greenplum](https://gpdb.docs.pivotal.io/4350/common/client-docs-unix.html). Make connections to postgres / greenplum database using pyscopg2 or sqlalchemy.Use the connections to interact with database in interactive program or run queries from a sql file using the connection|[sample greenplum code](documentation/greenplum_client.ipynb)
 mysql_client|Lets you use mysql and other methods provided by PyMySQL Package|[sample mysql code](documentation/mysql_client.ipynb)
 file_processor|Create sftp connection using [paramiko](https://github.com/paramiko/paramiko.git) package. Other file manipulations like row_count, encryption, archive (File Class)|[see file processing example](documentation/file_processing.ipynb)
 notification|Send email notifications|
 mongo_client|Load data to mongodb using bulk load. Run java script queries|[see mongo example](documentation/mongo_example.ipynb)
-redis_client|Read data from a redis cache or load a redis cache|
+redis_client|Read data from a redis cache or load a redis cache|[see redis example](documentation/redis_example.ipynb)
 kafka_system|Currently allows Publisher and Consumer to use kafka in batch mode|[see kafka example](documentation/kafka_example.ipynb)
 rabbitmq_system|Currently has Publisher to publish messages in rabbitmq|
 mixpanel_client|Connect to mixpanel api and fetch data using jql or export raw events data. [mixpanel api documentation](https://mixpanel.com/help/reference/jql/api-reference)|[see mixpnael section in api example](documentation/api_examples.ipynb)
@@ -73,9 +73,9 @@ The data pipeline consists of data from components and API.
 Each object of data-processor can use individual data streams and process them data_pipeline decides which
 modules to call based on type of database (as defined in config file). 
 data_pipeline comprises of 3 classes
-- DataComponent : Each database connection is considered to be data-component object
-- APICall : Each api call is an apicall object.
-- DataProcessor : transfers and loads data between data components
+- DataComponent : Each database connection is considered to be data-component object.See examples for postgres, mysql, greenplum, etc above
+- APICall : Each api call is an apicall object. See examples for mixpanel, delighted, salesforce and wootric above
+- DataProcessor : transfers and loads data between data components. [see examples](documentation/data_processor.ipynb)
 
 
 ### Adding ipython notebook files to github
@@ -83,7 +83,7 @@ Use git lfs
  See [documentation](https://git-lfs.github.com/?utm_source=github_site&utm_medium=jupyter_blog_link&utm_campaign=gitlfs)
 
 - if using mac install git-lfs using brew ```brew install git-lfs```
-- install lfs ``git lfs install```
+- install lfs ```git lfs install```
 - track ipynb files in your project. go to the project folder and do ```git lfs track "*.psd"```
 - add ```.*ipynb_checkpoints/``` to .gitignore file
 - Finally add .gitattributes file ```git add .gitatttributes```
