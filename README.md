@@ -52,7 +52,7 @@ v1.0 of the package comprises of the following classes. Please see link to sampl
 |class|  Description  | Sample Code |
 |:--------|:-----------------|:---------|
 environment| Lets you source all the os environment variables|[see first row in mongo example](documentation/mongo_example.ipynb)
-postgres_client| Lets you use psql and gpload utilities provided by [pivotal greenplum](https://gpdb.docs.pivotal.io/4350/common/client-docs-unix.html). Make connections to postgres / greenplum database using pyscopg2 or sqlalchemy.Use the connections to interact with database in interactive program or run queries from a sql file using the connection|[sample postgres code](documentation/postgres_client.ipynb)
+postgres_client|Lets you make connections to postgres / redshift database using pyscopg2 or sqlalchemy.Use the connections to interact with database in interactive program or run queries from a sql file using the connection|[sample postgres code](documentation/postgres_client.ipynb)
 greenplum_client (inherits postgres_client)| Lets you use psql and gpload utilities provided by [pivotal greenplum](https://gpdb.docs.pivotal.io/4350/common/client-docs-unix.html). Make connections to postgres / greenplum database using pyscopg2 or sqlalchemy.Use the connections to interact with database in interactive program or run queries from a sql file using the connection|[sample greenplum code](documentation/greenplum_client.ipynb)
 mysql_client|Lets you use mysql and other methods provided by PyMySQL Package|[sample mysql code](documentation/mysql_client.ipynb)
 file_processor|Create sftp connection using [paramiko](https://github.com/paramiko/paramiko.git) package. Other file manipulations like row_count, encryption, archive (File Class)|[see file processing example](documentation/file_processing.ipynb)
@@ -67,8 +67,10 @@ delighted_client|Get nps scores and survey responses from delighted.[api documen
 wootric_client|Gets nps scores and survey responses from wootric.[api documentation](http://docs.wootric.com/api)|[see wootric section in api example](documentation/api_examples.ipynb)
 dag_controller|Functions needed to integrate this package within an airflow dag. [airflow documentation](https://airflow.apache.org/) and [github project](https://github.com/apache/incubator-airflow)|
 
-### data_pipeline class
-This is the main class that's accessible to other projects. 
+
+### data_pipeline classses
+This file comprises of the classes that's accessible to other projects. 
+data_pipeline uses a factory design pattern and creates the object based on type of database or api being accessed.
 The data pipeline consists of data from components and API.
 Each object of data-processor can use individual data streams and process them data_pipeline decides which
 modules to call based on type of database (as defined in config file). 
@@ -79,16 +81,17 @@ data_pipeline comprises of 3 classes
 
 
 ### Adding ipython notebook files to github
-Use git lfs 
- See [documentation](https://git-lfs.github.com/?utm_source=github_site&utm_medium=jupyter_blog_link&utm_campaign=gitlfs)
+Use git large file system (git lfs). See [documentation](https://git-lfs.github.com/?utm_source=github_site&utm_medium=jupyter_blog_link&utm_campaign=gitlfs)
 
 - if using mac install git-lfs using brew ```brew install git-lfs```
 - install lfs ```git lfs install```
-- track ipynb files in your project. go to the project folder and do ```git lfs track "*.psd"```
+- track ipynb files in your project. go to the project folder and do ```git lfs track "*.ipynb"```
 - add ```.*ipynb_checkpoints/``` to .gitignore file
 - Finally add .gitattributes file ```git add .gitatttributes```
 
-### Deploying code in pypi
-- build the code: ```python setup.py build && python setup.py clean && python setup.py install```
+
+### hosting python package in pypi
+- add your credentials to $HOME/.pypirc file [see instructions](https://packaging.python.org/guides/migrating-to-pypi-org/#uploading)
+- build the code : ```python setup.py build && python setup.py clean && python setup.py install```
 - push to pypitest : ```python setup.py sdist upload -r pypitest```
 - push to pypi prod : ```python setup.py sdist upload -r pypi```
