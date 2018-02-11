@@ -48,7 +48,7 @@ if maj_ver == 3:
         # Versions should comply with PEP440.  For a discussion on single-sourcing
         # the version across setup3.py and the project code, see
         # https://packaging.python.org/en/latest/single_source_version.html
-        version='1.0',
+        version='1.1',
 
         description='Python wrapper for connecting to postgres/greenplum, mysql, mongodb, kafka, redis, mixpanel and salesforce.\
         Also included are modules for performing secure file transfer and sourcing environment variables.',
@@ -116,7 +116,7 @@ if maj_ver == 3:
 else:
     setup(
         name='dattasa',
-        version='1.0',
+        version='1.1',
         packages=['dattasa'],
         url='https://github.com/kartikra/dattasa',
         license='MIT',
