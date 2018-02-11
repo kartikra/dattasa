@@ -62,7 +62,7 @@ if maj_ver == 3:
         author_email='r.kartik@berkeley.edu',
 
         # Choose your license
-        license='GNU',
+        license='MIT',
 
         # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
         classifiers=[
