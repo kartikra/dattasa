@@ -1,4 +1,4 @@
-greenplum_source: &greenplum_source
+gp3: &gp3
     adapter: greenplum
     host: gp_host_name
     database: gp_database_name
@@ -7,7 +7,7 @@ greenplum_source: &greenplum_source
     password: gp_user_password
 
 
-postgres_source: &postgres_source
+pg_sql01: &pg_sql01
     adapter: postgres
     host: postgres_host_name
     database: postgres_database_name
@@ -16,7 +16,7 @@ postgres_source: &postgres_source
     password: postgres_db_user_password
 
 
-mysql_source: &mysql_source
+mysql01: &mysql01
     adapter: mysql
     host: mysql_host_name
     database: database_name
@@ -25,3 +25,52 @@ mysql_source: &mysql_source
     password: mysql_db_user_password
 
 
+mysql02: &mysql02
+    adapter: mysql
+    host: mysql_host_name
+    database: database_name
+    port: 3306
+    user: mysql_db_user
+    password: mysql_db_user_password
+    ssl_params:
+        key: notreallyakey
+
+
+sfdc01: &sfdc01
+  adapter: api
+  service: salesforce   
+  salesforce_user : myname@mycompany.com
+  salesforce_password : salesforce-password
+  apisecret : salesforce-api-secret
+  
+mixpanel-project01: &mixpanel-project01
+    adapter: api
+    service: mixpanel
+    token: mytoken
+    apikey: mykey
+    apisecret: mysecret
+    
+delighted-project: &delighted-project
+    adapter: api
+    service: delighted
+    apikey: mykey
+
+wootric-project: &wootric-project
+    adapter: api
+    service: wootric
+    apikey: mykey
+    apisecret: mysecret
+
+kafka-smash01: &kafka-smash01
+    adapter: kafka-batch
+    bootstrap_servers:
+        - "vensav-smash01:9092"
+
+mongo-db01: &mongo-db01
+    adapter: mongodb
+    host: mongohost
+    port: 27017
+    auth_database: mongo_auth_db_name
+    database: mongo_db_name
+    user: mongo_user
+    password: mongo_user_password

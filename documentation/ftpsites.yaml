@@ -1,4 +1,4 @@
-my_site: &my_site
+my_sftp_site: &my_sftp_site
     host: sftphost.somecomany.com
     port: some_port
     user: some_user
