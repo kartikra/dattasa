@@ -87,7 +87,7 @@ Use git large file system (git lfs). See [documentation](https://git-lfs.github.
 - install lfs ```git lfs install```
 - track ipynb files in your project. go to the project folder and do ```git lfs track "*.ipynb"```
 - add ```.*ipynb_checkpoints/``` to .gitignore file
-- Finally add .gitattributes file ```git add .gitatttributes```
+- Finally add .gitattributes file ```git add .gitattributes```
 
 
 ### hosting python package in pypi
